@@ -47,6 +47,8 @@ t.test(x2, alternative = "less", mu = 20000)
 set.seed(3)
 sbandung <- rnorm(19, 3.64, 1.67)
 sbali <- rnorm(27, 2.79, 1.32)
+sbandung
+sbali
 # c
 t.test(sbandung, sbali, alternative = "two.sided", var.equal = TRUE)
 # d nilai kritikal= -4.302653 dan 4.302653
@@ -108,13 +110,20 @@ model1 <- lm(Length ~ Group, data = datakucing)
 model1
 anova(model1)
 summary(aov(Length ~ Group, data = datakucing))
-# niali p = 0.0013 # Dari hasil nilai P yang didapatkan, dapat disimpulkan bahwa hipotesis yang diterima
+
+# d
+# nilai p = 0.0013 # Dari hasil nilai P yang didapatkan, dapat disimpulkan bahwa hipotesis yang diterima
 # adalah H1 karena p value lebih kecil dari significant level
 
 # e
 TukeyHSD(aov(model1))
 # Iya, didapatkan satu jenis kucing lebih panjang dari yang lain
 
+# f
+ggplot(data = model1, aes(sample = Length)) +
+    geom_qq(color = "dark blue") +
+    geom_qq_line(color = "orange") +
+    labs(y = "Length")
 # NOMOR 5
 # a
 install.packages("ggpubr", dependencies = TRUE)
@@ -144,8 +153,8 @@ ggline(dataOP,
 two.way <- aov(Light ~ Temp + Glass, data = dataOP)
 summary(two.way)
 
-# c
 install.packages("dplyr")
+# c
 require("dplyr")
 group_by(dataOP, Glass) %>%
     summarise(
@@ -155,18 +164,13 @@ group_by(dataOP, Glass) %>%
         meanT = mean(Temp, na.rm = TRUE),
         sdT = sd(Temp, na.rm = TRUE)
     )
-group_by(dataOP, Glass) %>%
-    summarise(
-        count = n(),
-        mean = mean(Temp, na.rm = TRUE),
-        sd = sd(Temp, na.rm = TRUE)
-    )
+
 
 # d
 TukeyHSD(two.way)
 
-# e
 install.packages("multcomp")
+# e
 library("multcomp")
 two.way
 ph <- glht(two.way, linfct = mcp(Glass = "Tukey"))
